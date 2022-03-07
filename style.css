@@ -1,0 +1,12 @@
+#tasks-list {
+    text-decoration: none;
+}
+
+.task {
+    text-decoration: none;
+    list-style-type: none;
+    background-color: aqua;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 18px;
+}
