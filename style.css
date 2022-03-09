@@ -9,8 +9,29 @@
     border-radius: 8px;
     margin-top: 10px;
     font-size: 18px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
 }
+
+.task > * {
+    margin: 10px;
+}
+
 
 .todoInput {
     border-radius: 8px;
+}
+
+p {
+    margin: 0!important;
+    min-width: 100px;
+}
+
+.hideItem {
+    display: none;
+}
+
+.done{
+    text-decoration: line-through;
 }
