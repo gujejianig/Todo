@@ -121,12 +121,15 @@ const editHandler = (identifier, index) => {
         initialValue.classList.remove('hideItem')
         initialValue.innerHTML = inputForEdit.value
 
-        initialTaskData.find((task, index) => initialTaskData[2].task = inputForEdit.value) // ცვლის ინფორმაციას ინფუთში და ობიექტში
-        initialTaskData.find((task, index) => console.log(index)) // konsoli
+        // initialTaskData.find((task, index) => initialTaskData[2].task = inputForEdit.value) // ცვლის ინფორმაციას ინფუთში და ობიექტში
+        // initialTaskData.find((task, index) => console.log(index)) // konsoli
 
-        console.log(initialTaskData[1])
-        console.log(initialTaskData)
-        console.log(index)
+      initialTaskData.find((data) => {
+          if(data.id === identifier) {
+              data.task = inputForEdit.value
+          }
+          console.log(initialTaskData)
+      })
     }
 
 }
