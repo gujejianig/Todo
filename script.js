@@ -11,7 +11,7 @@ let initialTaskData = [];
 
 let pagesData = [];
 
-function showTask() {
+const showTask = () => {
 
 
     const lastElement = paginationBtnWrapper.lastChild;
@@ -151,7 +151,7 @@ const editHandler = (identifier) => {
 }
 
 // Item Removing
-function removeBtn(identifier) {
+const removeBtn = (identifier) => {
     const removeButton = document.getElementById('remove' + identifier)
 
     initialTaskData = initialTaskData.filter((items) => {
@@ -169,7 +169,7 @@ function removeBtn(identifier) {
 
 }
 
-function onCheckBox(identifier) {
+const onCheckBox = (identifier) => {
     const checkBox = document.getElementById('checkBox' + identifier)
     const initialValue = document.getElementById('changedValue' + identifier)
     if (checkBox.checked === true) {
