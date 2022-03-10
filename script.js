@@ -15,7 +15,6 @@ function showTask() {
 
 
     const lastElement = paginationBtnWrapper.lastChild;
-    console.log(lastElement) // lastElement ishleba
     if (lastElement) {
         lastElement.classList.add('active')
 
@@ -132,10 +131,13 @@ const editHandler = (identifier) => {
 
     if (editBtn.innerHTML === 'Edit') {
         editBtn.innerHTML = 'Save'
+        removeButton.innerHTML = 'Cancel'
         initialValue.classList.add('hideItem')
         inputForEdit.classList.remove('hideItem')
     } else if (editBtn.innerHTML === 'Save') {
         editBtn.innerHTML = 'Edit'
+        removeButton.innerHTML = 'Remove'
+
         inputForEdit.classList.add('hideItem')
         initialValue.classList.remove('hideItem')
         initialValue.innerHTML = inputForEdit.value
@@ -152,13 +154,15 @@ const editHandler = (identifier) => {
 // Item Removing
 function removeBtn(identifier) {
     const removeButton = document.getElementById('remove' + identifier)
-    const editBtn = document.getElementById('edit' + identifier)
 
     initialTaskData = initialTaskData.filter((items) => {
 
         if (removeButton.innerHTML === 'Remove') {
             return items.id !== identifier
+        } else {
+            return items
         }
+
 
     })
 
