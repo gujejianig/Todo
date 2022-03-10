@@ -4,9 +4,7 @@ const paginationBtnWrapper = document.getElementById(
     "pagination-buttons-wrapper"
 );
 
-let  getIndex;
-
-
+let getIndex;
 
 
 let initialTaskData = [];
@@ -14,9 +12,19 @@ let initialTaskData = [];
 let pagesData = [];
 
 function showTask() {
-    console.log(initialTaskData)
+
+
+    const lastElement = paginationBtnWrapper.lastChild;
+    console.log(lastElement) // lastElement ishleba
+    if (lastElement) {
+        lastElement.classList.add('active')
+
+    }
+
+
     const innerDiv = document.createElement('div');
-    innerDiv.addEventListener('click', () =>  {});
+    innerDiv.addEventListener('click', () => {
+    });
 
     taskList.innerHTML =
         "<div " +
@@ -26,8 +34,8 @@ function showTask() {
                 return "<div id=" + 'mainDiv' + task.id + " class='task' >" + '<p  id=' + 'changedValue' + task.id + ' class="todoInput"> ' + task.task + ' </p>' +
                     "<input onclick=onCheckBox(" + task.id + ") id=" + 'checkBox' + task.id + " type='checkbox' />" +
                     '<input value=' + task.task + ' id=' + 'ident' + task.id + ' class="hideItem" ' + '/>' +
-                    "<button onclick=removeBtn(" + task.id + ") type='button' class='btn btn-danger'>" + 'Remove' + '</button>'
-                    + "<button onclick=editHandler(" + task.id +  ")  type='button' id=" + 'edit' + task.id + " class='btn btn-info'>" + 'Edit' + "</button>" + "</div>"
+                    "<button onclick=removeBtn(" + task.id + ")  id=" + 'remove' + task.id + " type='button' class='btn btn-danger'>" + 'Remove' + '</button>'
+                    + "<button onclick=editHandler(" + task.id + ")  type='button' id=" + 'edit' + task.id + " class='btn btn-info'>" + 'Edit' + "</button>" + "</div>"
             })
             .join("") +
         "</div>";
@@ -46,17 +54,30 @@ const addTask = () => {
 
 
 const changePage = (pageNumber) => {
+    const paginationBtn = document.getElementById('paginationBtn' + pageNumber)
+    const globalPaginationBtn = document.querySelectorAll('.btn-default')
+
+
+    globalPaginationBtn.forEach((button) => {
+        button.classList.remove('active')
+
+    })
+
+    if (paginationBtn.innerHTML == pageNumber + 1) {
+        paginationBtn.classList.add('active')
+    }
+
+
     taskList.innerHTML = pagesData[pageNumber]
-        .map((task, index) => {
+        .map((task) => {
             return "<div id=" + 'mainDiv' + task.id + " class='task' >" + '<p id=' + 'changedValue' + task.id + ' class="todoInput"> ' + task.task + ' </p>' +
                 "<input onclick=onCheckBox(" + task.id + ") id=" + 'checkBox' + task.id + " type='checkbox' />" +
-                '<input value=' + task.task + ' id=' + 'ident' + task.id + ' class="hideItem" ' + '/>' +    // მჭირდება ეს ველიუ
-                "<button onclick=removeBtn(" + task.id + ") type='button' class='btn btn-danger'>" + 'Remove' + '</button>'
+                '<input value=' + task.task + ' id=' + 'ident' + task.id + ' class="hideItem" ' + '/>' +
+                "<button onclick=removeBtn(" + task.id + ") id=" + 'remove' + task.id + "  type='button' class='btn btn-danger'>" + 'Remove' + '</button>'
                 + "<button onclick=editHandler(" + task.id + ")  type='button' id=" + 'edit' + task.id + " class='btn btn-info'>" + 'Edit' + '</button>' + "</div>"
         })
         .join("");
 };
-
 
 
 addTaskInput.addEventListener("keyup", (e) => {
@@ -69,6 +90,7 @@ addTaskInput.addEventListener("keyup", (e) => {
 const renderPagesData = (initialData) => {
     let singlePageData = [];
     let counter = 0;
+
     pagesData = [];
     initialData.forEach((task, index) => {
 
@@ -83,13 +105,11 @@ const renderPagesData = (initialData) => {
     });
 
 
-    showTask()
-
-
     paginationBtnWrapper.innerHTML = pagesData
         .map((singlePageList, index) => {
+
             return (
-                "<button class='btn btn-default' onclick=changePage(" +
+                "<button id=" + 'paginationBtn' + index + " class='btn btn-default ' onclick=changePage(" +
                 index +
                 ")>" +
                 (index + 1) +
@@ -98,46 +118,50 @@ const renderPagesData = (initialData) => {
         })
         .join("");
 
+    showTask()
+
 }
 
 // Item Editing
 
-const editHandler = (identifier, index) => {
-    console.log('identifier', identifier);
-    console.log('index', index);
+const editHandler = (identifier) => {
     const inputForEdit = document.getElementById('ident' + identifier)
     const editBtn = document.getElementById('edit' + identifier)
     const initialValue = document.getElementById('changedValue' + identifier)
-    const mainDivElement = document.getElementById('mainDiv'+identifier)
+    const removeButton = document.getElementById('remove' + identifier)
+
     if (editBtn.innerHTML === 'Edit') {
         editBtn.innerHTML = 'Save'
         initialValue.classList.add('hideItem')
         inputForEdit.classList.remove('hideItem')
-        console.log(mainDivElement.querySelectorAll("button"))
-
     } else if (editBtn.innerHTML === 'Save') {
         editBtn.innerHTML = 'Edit'
         inputForEdit.classList.add('hideItem')
         initialValue.classList.remove('hideItem')
         initialValue.innerHTML = inputForEdit.value
-
-        initialTaskData.find((task, index) => initialTaskData[2].task = inputForEdit.value) // ცვლის ინფორმაციას ინფუთში და ობიექტში
-        initialTaskData.find((task, index) => console.log(index)) // konsoli
-
-        console.log(initialTaskData[1])
-        console.log(initialTaskData)
-        console.log(index)
+        initialTaskData.find((data) => {
+            if (data.id === identifier) {
+                data.task = inputForEdit.value
+            }
+        })
     }
+
 
 }
 
 // Item Removing
 function removeBtn(identifier) {
+    const removeButton = document.getElementById('remove' + identifier)
+    const editBtn = document.getElementById('edit' + identifier)
+
     initialTaskData = initialTaskData.filter((items) => {
 
-        return items.id !== identifier
+        if (removeButton.innerHTML === 'Remove') {
+            return items.id !== identifier
+        }
 
     })
+
     renderPagesData(initialTaskData)
 
 }

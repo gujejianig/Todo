@@ -24,7 +24,7 @@
 }
 
 p {
-    margin: 0!important;
+    margin: 0 !important;
     min-width: 100px;
 }
 
@@ -32,6 +32,11 @@ p {
     display: none;
 }
 
-.done{
+.done {
     text-decoration: line-through;
+}
+
+
+.active {
+    background-color: yellow !important;
 }
