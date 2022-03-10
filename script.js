@@ -17,7 +17,6 @@ function showTask() {
     const lastElement = paginationBtnWrapper.lastChild;
     if (lastElement) {
         lastElement.classList.add('active')
-
     }
 
 
