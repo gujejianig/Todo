@@ -11,13 +11,11 @@ let initialTaskData = [];
 
 let pagesData = [];
 
-function showTask() {
-
-
-
-
-
-
+const showTask = () => {
+    //
+    // const lastElement = paginationBtnWrapper.lastChild;
+    //
+    // onPageControler = Number(lastElement.textContent)
 
 
     const innerDiv = document.createElement('div');
@@ -41,12 +39,6 @@ function showTask() {
 
 const addTask = () => {
 
-    if(taskList){
-        console.log('yes')
-    } else {
-        console.log('no')
-    }
-
     if (addTaskInput.value.trim().length !== 0) {
         initialTaskData.push({task: addTaskInput.value, id: Date.now()});
         addTaskInput.value = "";
@@ -54,17 +46,29 @@ const addTask = () => {
 
         renderPagesData(initialTaskData)
     }
+
     const lastElement = paginationBtnWrapper.lastChild;
     if (lastElement) {
         lastElement.classList.add('active')
     }
+
+    onPageControler = Number(lastElement.textContent)
 };
 
+var onPageControler;
 
 const changePage = (pageNumber) => {
     const paginationBtn = document.getElementById('paginationBtn' + pageNumber)
     const globalPaginationBtn = document.querySelectorAll('.btn-default')
-
+    if (paginationBtn) {
+        onPageControler = paginationBtn.innerHTML
+        console.log('onPageControl !== null')
+    } else {
+            const lastElement = paginationBtnWrapper.lastChild
+            let akk = lastElement.textContent
+            onPageControler = Number(akk - 1)
+        console.log(akk)
+    }
 
     globalPaginationBtn.forEach((button) => {
         button.classList.remove('active')
@@ -74,6 +78,7 @@ const changePage = (pageNumber) => {
     if (Number(paginationBtn.innerHTML) === pageNumber + 1) {
         paginationBtn.classList.add('active')
     }
+
 
     taskList.innerHTML = pagesData[pageNumber]
         .map((task) => {
@@ -155,10 +160,12 @@ const editHandler = (identifier) => {
             }
         })
     }
+
+
 }
 
 // Item Removing
-function removeBtn(identifier) {
+const removeBtn = (identifier) => {
     const removeButton = document.getElementById('remove' + identifier)
 
     initialTaskData = initialTaskData.filter((items) => {
@@ -168,13 +175,16 @@ function removeBtn(identifier) {
         } else {
             return items
         }
+
+
     })
 
     renderPagesData(initialTaskData)
-
+    changePage(onPageControler - 1)
+    console.log(onPageControler)
 }
 
-function onCheckBox(identifier) {
+const onCheckBox = (identifier) => {
     const checkBox = document.getElementById('checkBox' + identifier)
     const initialValue = document.getElementById('changedValue' + identifier)
     if (checkBox.checked === true) {
