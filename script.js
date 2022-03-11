@@ -11,13 +11,13 @@ let initialTaskData = [];
 
 let pagesData = [];
 
-const showTask = () => {
+function showTask() {
 
 
-    const lastElement = paginationBtnWrapper.lastChild;
-    if (lastElement) {
-        lastElement.classList.add('active')
-    }
+
+
+
+
 
 
     const innerDiv = document.createElement('div');
@@ -41,12 +41,22 @@ const showTask = () => {
 
 const addTask = () => {
 
+    if(taskList){
+        console.log('yes')
+    } else {
+        console.log('no')
+    }
+
     if (addTaskInput.value.trim().length !== 0) {
         initialTaskData.push({task: addTaskInput.value, id: Date.now()});
         addTaskInput.value = "";
 
 
         renderPagesData(initialTaskData)
+    }
+    const lastElement = paginationBtnWrapper.lastChild;
+    if (lastElement) {
+        lastElement.classList.add('active')
     }
 };
 
@@ -64,7 +74,6 @@ const changePage = (pageNumber) => {
     if (Number(paginationBtn.innerHTML) === pageNumber + 1) {
         paginationBtn.classList.add('active')
     }
-
 
     taskList.innerHTML = pagesData[pageNumber]
         .map((task) => {
@@ -146,12 +155,10 @@ const editHandler = (identifier) => {
             }
         })
     }
-
-
 }
 
 // Item Removing
-const removeBtn = (identifier) => {
+function removeBtn(identifier) {
     const removeButton = document.getElementById('remove' + identifier)
 
     initialTaskData = initialTaskData.filter((items) => {
@@ -161,15 +168,13 @@ const removeBtn = (identifier) => {
         } else {
             return items
         }
-
-
     })
 
     renderPagesData(initialTaskData)
 
 }
 
-const onCheckBox = (identifier) => {
+function onCheckBox(identifier) {
     const checkBox = document.getElementById('checkBox' + identifier)
     const initialValue = document.getElementById('changedValue' + identifier)
     if (checkBox.checked === true) {
