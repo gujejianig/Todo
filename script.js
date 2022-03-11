@@ -11,7 +11,7 @@ let initialTaskData = [];
 
 let pagesData = [];
 
-function showTask() {
+const showTask = () => {
 
 
     const lastElement = paginationBtnWrapper.lastChild;
@@ -64,6 +64,7 @@ const changePage = (pageNumber) => {
     if (Number(paginationBtn.innerHTML) === pageNumber + 1) {
         paginationBtn.classList.add('active')
     }
+
 
     taskList.innerHTML = pagesData[pageNumber]
         .map((task) => {
@@ -145,10 +146,12 @@ const editHandler = (identifier) => {
             }
         })
     }
+
+
 }
 
 // Item Removing
-function removeBtn(identifier) {
+const removeBtn = (identifier) => {
     const removeButton = document.getElementById('remove' + identifier)
 
     initialTaskData = initialTaskData.filter((items) => {
@@ -158,13 +161,15 @@ function removeBtn(identifier) {
         } else {
             return items
         }
+
+
     })
 
     renderPagesData(initialTaskData)
 
 }
 
-function onCheckBox(identifier) {
+const onCheckBox = (identifier) => {
     const checkBox = document.getElementById('checkBox' + identifier)
     const initialValue = document.getElementById('changedValue' + identifier)
     if (checkBox.checked === true) {
