@@ -156,7 +156,6 @@ const editHandler = (identifier) => {
 
 
 };
-
 // Item Removing
 const removeBtn = (identifier) => {
     const removeButton = document.getElementById(`remove${identifier}`);
