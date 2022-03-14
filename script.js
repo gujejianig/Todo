@@ -169,7 +169,6 @@ const removeBtn = (identifier) => {
             return items;
         }
 
-
     });
     renderPagesData(initialTaskData);
     changePage(onPageControler - 1);
