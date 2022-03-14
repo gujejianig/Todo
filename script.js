@@ -61,23 +61,31 @@ const changePage = (pageNumber) => {
     const paginationBtn = document.getElementById('paginationBtn' + pageNumber)
     const globalPaginationBtn = document.querySelectorAll('.btn-default')
     if (paginationBtn) {
+        globalPaginationBtn.forEach((button) => {
+            button.classList.remove('active')
+
+        })
         onPageControler = paginationBtn.innerHTML
-        console.log('onPageControl !== null')
-    } else {
-            const lastElement = paginationBtnWrapper.lastChild
-            let akk = lastElement.textContent
-            onPageControler = Number(akk - 1)
-        console.log(akk)
+        if (Number(paginationBtn.innerHTML) === pageNumber + 1) {
+
+            paginationBtn.classList.add('active')
+            console.log('if element ')
+        }
+
     }
 
-    globalPaginationBtn.forEach((button) => {
-        button.classList.remove('active')
 
-    })
+    else {
+        const lastElement = paginationBtnWrapper.lastChild
+        let akk = lastElement.textContent
+        onPageControler = Number(akk)
+        lastElement.classList.add('active')
 
-    if (Number(paginationBtn.innerHTML) === pageNumber + 1) {
-        paginationBtn.classList.add('active')
+        console.log(paginationBtn)
+        console.log('eeeeeeee')
+
     }
+
 
 
     taskList.innerHTML = pagesData[pageNumber]
