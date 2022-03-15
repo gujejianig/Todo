@@ -9,31 +9,48 @@ let getIndex;
 let initialTaskData = [];
 
 let pagesData = [];
+let counter = 0
+let indexControl = 0
 
 const showTask = () => {
     const innerDiv = document.createElement("div");
     innerDiv.addEventListener("click", () => {
     });
-    if (initialTaskData.length >=0) {
-    taskList.innerHTML =
-        pagesData[pagesData.length - 1]
-            ?.map((task, index) => {
 
-                getIndex = index;
-                return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
+
+
+
+    if(counter > 4) {
+        indexControl = indexControl + 5; // როდის უნდა გაიზარდოს?!?!?!?!
+        counter = 0
+    }
+    counter = counter + 1
+
+    console.log(counter)
+
+
+
+    if (initialTaskData.length >=0) {
+        taskList.innerHTML =
+            initialTaskData.slice(indexControl,initialTaskData.length )
+                ?.map((task, index) => {
+
+                    getIndex = index;
+                    return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
                 <input onclick=onCheckBox(${task.id}) id="checkBox${task.id}" type="checkbox" /> 
                 <input value="${task.task}" id="ident${task.id}" class="hideItem"/>
                 <button onclick=removeBtn(${task.id}) id="remove${task.id}"  type="button" class="btn btn-danger">Remove</button>
                 <button onclick=editHandler(${task.id})  type="button" id="edit${task.id}" class="btn btn-info">Edit</button></div>`;
-            })
-            .join("")}
- if ( pagesData[pagesData.length - 1] === undefined) {
-     taskList.innerHTML = "<div>No todo exist</div>"
- }
-
+                })
+                .join("")}
+    if ( pagesData[pagesData.length - 1] === undefined) {
+        taskList.innerHTML = "<div>No todo exist</div>"
+    }
 };
 
 const addTask = () => {
+
+    // console.log(initialTaskData)
 
     if (addTaskInput.value.trim().length !== 0) {
         initialTaskData.push({task: addTaskInput.value, id: Date.now()});
