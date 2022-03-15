@@ -89,7 +89,7 @@ const changePage = (pageNumber) => {
         }
     }
     if (initialTaskData.length >= 0) {
-        taskList.innerHTML = pagesData[pageNumber]
+        taskList.innerHTML = initialTaskData.slice(indexControl, initialTaskData.length)//!!!!!!!!!!!!!!!!!!!!!!! probably needs some changes, ჯერ უნდა გადავხედო და შევამოწმო რა უშლის ხელს
             .map((task) => {
                 return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
                 <input onclick=onCheckBox(${task.id}) id="checkBox${task.id}" type="checkbox" /> 
@@ -124,16 +124,19 @@ const renderPagesData = (initialData) => {
 
 
     });
+    // if(initialData.length % 5 === 0) {}
 
-    paginationBtnWrapper.innerHTML = pagesData
+    let ident = initialData.length % 5 === 0
+    paginationBtnWrapper.innerHTML = initialData // aq gvWirdeba cvlilebebi !! გავჩერდით აქ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         .map((singlePageList, index) => {
-            return (
-                `<button id="paginationBtn${index}" class="btn btn-default" onclick=changePage(${index})> 
+               return (
+                   `<button id="paginationBtn${index}" class="btn btn-default" onclick=changePage(${index})> 
                 ${index + 1}
                 </button>`
-            );
+               );
+
         })
-        .join("");
+        .join("")
 
     showTask();
 
