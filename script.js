@@ -3,21 +3,26 @@ const taskList = document.getElementById("tasks-list");
 const paginationBtnWrapper = document.getElementById(
     "pagination-buttons-wrapper"
 );
-let btnNumber = 1 // slice ელემენტის მეორე პარამეტრია.
-let num = 0; // წარმოადგენს ქაუნთერს, როდესაც 5 მდე აღწევს იქმნე აბათონი.
 
 let getIndex;
-
 let initialTaskData = [];
 
+let pagesData = [];
+let numCount = 0
+let indexControl = 0
+const showTask = () => { // გვჭირდება სწორი ინდიკატორი, ედთასკი ვერ ფილტრავს სათანადოდ
 
-const showTask = () => {
+
+    numCount = numCount + 1
     const innerDiv = document.createElement("div");
     innerDiv.addEventListener("click", () => {
     });
-    if (initialTaskData.length >= 0) {
+
+
+//-- IndexControl უნდა შემცირდეს, როდესაც ბოლო ფეიჯის ბოლო აითემი წაიშლება.
+    if (initialTaskData.length >=0) {
         taskList.innerHTML =
-            pagesData[pagesData.length - 1]
+            initialTaskData.slice(indexControl, initialTaskData.length)
                 ?.map((task, index) => {
 
                     getIndex = index;
@@ -27,23 +32,25 @@ const showTask = () => {
                 <button onclick=removeBtn(${task.id}) id="remove${task.id}"  type="button" class="btn btn-danger">Remove</button>
                 <button onclick=editHandler(${task.id})  type="button" id="edit${task.id}" class="btn btn-info">Edit</button></div>`;
                 })
-                .join("");
+                .join("")}
+    if ( pagesData[pagesData.length - 1] === undefined) {
+        taskList.innerHTML = "<div>No todo exist</div>"
     }
-    if (pagesData[pagesData.length - 1] === undefined) {
-        taskList.innerHTML = "<div>No todo exist</div>";
-    }
-
 };
 
 const addTask = () => {
-
-    num++;
-
+    if(numCount > 4) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+        numCount = 0
+        indexControl = indexControl + 5; // როდის უნდა გაიზარდოს?!?!?!?!
+    }
     if (addTaskInput.value.trim().length !== 0) {
         initialTaskData.push({task: addTaskInput.value, id: Date.now()});
         addTaskInput.value = "";
         renderPagesData(initialTaskData);
+
     }
+
+
 
     const lastElement = paginationBtnWrapper.lastChild;
     if (lastElement) {
@@ -51,6 +58,10 @@ const addTask = () => {
     }
 
     onPageControler = Number(lastElement.textContent);
+
+
+
+
 };
 
 let onPageControler;
@@ -71,20 +82,14 @@ const changePage = (pageNumber) => {
 
     } else {
         const lastElement = paginationBtnWrapper.lastChild;
-
         if (lastElement) {
             let akk = lastElement.textContent;
             onPageControler = Number(akk);
             lastElement.classList.add("active");
         }
-
-
     }
-    // დაბლა კოდში განხორციელდა ცვლილებები !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    console.log(pageNumber)
     if (initialTaskData.length >= 0) {
-
-        taskList.innerHTML = initialTaskData.slice(pageNumber, pageNumber + 5)
+        taskList.innerHTML = pagesData[pageNumber]
             .map((task) => {
                 return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
                 <input onclick=onCheckBox(${task.id}) id="checkBox${task.id}" type="checkbox" /> 
@@ -94,9 +99,6 @@ const changePage = (pageNumber) => {
             })
             .join("");
     }
-
-    // მაღლა კოდში განხორციელდა ცვლილებები !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 };
 
 addTaskInput.addEventListener("keyup", (e) => {
@@ -105,9 +107,6 @@ addTaskInput.addEventListener("keyup", (e) => {
         addTaskInput.value = "";
     }
 });
-
-
-
 
 const renderPagesData = (initialData) => {
     let singlePageData = [];
@@ -126,31 +125,20 @@ const renderPagesData = (initialData) => {
 
     });
 
-
-console.log('render page data working!!!')
-// იქმნება იმდენი ბთნ რამდენი აიტემიც გვაქვს ინითიალდათასი !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! დაბლა კოდში განხორციელდა ცვლილებები.
-    // აქ იქმნება ბათონები!!
-    console.log(initialData.slice(0,btnNumber))
-    if (num > 5) {
-        console.log(initialData.slice(0,btnNumber))
-        btnNumber++
-        paginationBtnWrapper.innerHTML = initialData.slice(0,btnNumber)
-            .map((singlePageList, index) => {
-                return (
-                    `<button id="paginationBtn${index}" class="btn btn-default" onclick=changePage(${index})> 
-                ${index + 1} 
+    paginationBtnWrapper.innerHTML = pagesData
+        .map((singlePageList, index) => {
+            return (
+                `<button id="paginationBtn${index}" class="btn btn-default" onclick=changePage(${index})> 
+                ${index + 1}
                 </button>`
-                );
-            })
-            .join("");
-        num = 0;
-    }
-
+            );
+        })
+        .join("");
 
     showTask();
 
 };
-// იქმნება იმდენი ბთნ რამდენი აიტემიც გვაქვს ინითიალდათასი !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! მაღლა კოდში განხორციელდა ცვლილებები.
+
 
 
 
@@ -180,13 +168,19 @@ const editHandler = (identifier) => {
 
 
 };
-
 // Item Removing
 const removeBtn = (identifier) => {
-    // btnNumber--;  I probably gonna use it <--------------------------------------------------------------------
-    // num--
+    console.log(indexControl, Number(initialTaskData.length))
+
+    console.log(indexControl)
 
 
+    if(indexControl === Number(initialTaskData.length - 1)) {
+        indexControl = indexControl - 5
+        console.log(indexControl)
+        console.log('kslamsk')
+
+    }
     const removeButton = document.getElementById(`remove${identifier}`);
 
     initialTaskData = initialTaskData.filter((items) => {
