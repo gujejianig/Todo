@@ -1,65 +1,60 @@
 const addTaskInput = document.getElementById("add-task-input");
 const taskList = document.getElementById("tasks-list");
 const paginationBtnWrapper = document.getElementById(
-    "pagination-buttons-wrapper"
+	"pagination-buttons-wrapper"
 );
 
 let getIndex;
 let initialTaskData = [];
 
-let pagesData = [];
-let numCount = 0
-let indexControl = 0
+let numCount = 0;
+let indexControl = 0;
 const showTask = () => { // გვჭირდება სწორი ინდიკატორი, ედთასკი ვერ ფილტრავს სათანადოდ
-
-
-    numCount = numCount + 1
-    const innerDiv = document.createElement("div");
-    innerDiv.addEventListener("click", () => {
-    });
+	numCount = numCount + 1;
 
 
 //-- IndexControl უნდა შემცირდეს, როდესაც ბოლო ფეიჯის ბოლო აითემი წაიშლება.
-    if (initialTaskData.length >=0) {
-        taskList.innerHTML =
-            initialTaskData.slice(indexControl, initialTaskData.length)
-                ?.map((task, index) => {
+	if (initialTaskData.length >= 0) {
+		taskList.innerHTML =
+			initialTaskData.slice(indexControl, initialTaskData.length)
+				?.map((task, index) => {
 
-                    getIndex = index;
-                    return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
+					getIndex = index;
+					return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
                 <input onclick=onCheckBox(${task.id}) id="checkBox${task.id}" type="checkbox" /> 
                 <input value="${task.task}" id="ident${task.id}" class="hideItem"/>
                 <button onclick=removeBtn(${task.id}) id="remove${task.id}"  type="button" class="btn btn-danger">Remove</button>
                 <button onclick=editHandler(${task.id})  type="button" id="edit${task.id}" class="btn btn-info">Edit</button></div>`;
-                })
-                .join("")}
-    if ( pagesData[pagesData.length - 1] === undefined) {
-        taskList.innerHTML = "<div>No todo exist</div>"
-    }
+				})
+				.join("");
+	}
+
 };
 
+
+const renderItems = () => {
+
+}
+
 const addTask = () => {
-    if(numCount > 4) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        numCount = 0
-        indexControl = indexControl + 5; // როდის უნდა გაიზარდოს?!?!?!?!
-    }
-    if (addTaskInput.value.trim().length !== 0) {
-        initialTaskData.push({task: addTaskInput.value, id: Date.now()});
-        addTaskInput.value = "";
-        renderPagesData(initialTaskData);
+	if (numCount > 4) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+		numCount = 0;
+		indexControl = indexControl + 5; // როდის უნდა გაიზარდოს?!?!?!?!
+	}
+	if (addTaskInput.value.trim().length !== 0) {
+		initialTaskData.push({task: addTaskInput.value, id: Date.now()});
+		addTaskInput.value = "";
+		renderPagesData(initialTaskData);
 
-    }
-
-
-
-    const lastElement = paginationBtnWrapper.lastChild;
-    if (lastElement) {
-        lastElement.classList.add("active");
-    }
-
-    onPageControler = Number(lastElement.textContent);
+	}
 
 
+	const lastElement = paginationBtnWrapper.lastChild;
+	if (lastElement) {
+		lastElement.classList.add("active");
+	}
+
+	onPageControler = Number(lastElement.textContent);
 
 
 };
@@ -67,144 +62,153 @@ const addTask = () => {
 let onPageControler;
 
 const changePage = (pageNumber) => {
-    const paginationBtn = document.getElementById(`paginationBtn${pageNumber}`);
-    const globalPaginationBtn = document.querySelectorAll(".btn-default");
+	const paginationBtn = document.getElementById(`paginationBtn${pageNumber}`);
+	const globalPaginationBtn = document.querySelectorAll(".btn-default");
 
-    if (paginationBtn) {
-        globalPaginationBtn.forEach((button) => {
-            button.classList.remove("active");
+	if (paginationBtn) {
+		globalPaginationBtn.forEach((button) => {
+			button.classList.remove("active");
 
-        });
-        onPageControler = paginationBtn.innerHTML;
-        if (Number(paginationBtn.innerHTML) === pageNumber + 1) {
-            paginationBtn.classList.add("active");
-        }
+		});
+		onPageControler = paginationBtn.innerHTML;
+		if (Number(paginationBtn.innerHTML) === pageNumber + 1) {
+			paginationBtn.classList.add("active");
+		}
 
-    } else {
-        const lastElement = paginationBtnWrapper.lastChild;
-        if (lastElement) {
-            let akk = lastElement.textContent;
-            onPageControler = Number(akk);
-            lastElement.classList.add("active");
-        }
-    }
-    if (initialTaskData.length >= 0) {
-        taskList.innerHTML = initialTaskData.slice(indexControl, initialTaskData.length)//!!!!!!!!!!!!!!!!!!!!!!! probably needs some changes, ჯერ უნდა გადავხედო და შევამოწმო რა უშლის ხელს
-            .map((task) => {
-                return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
+	} else {
+		const lastElement = paginationBtnWrapper.lastChild;
+		if (lastElement) {
+			let akk = lastElement.textContent;
+			onPageControler = Number(akk);
+			lastElement.classList.add("active");
+		}
+	}
+	if (initialTaskData.length >= 0) {
+		taskList.innerHTML = pagesData[pageNumber]
+			.map((task) => {
+				return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
                 <input onclick=onCheckBox(${task.id}) id="checkBox${task.id}" type="checkbox" /> 
                 <input value="${task.task}" id="ident${task.id}" class="hideItem"/>
                 <button onclick=removeBtn(${task.id}) id="remove${task.id}"  type="button" class="btn btn-danger">Remove</button>
                 <button onclick=editHandler(${task.id})  type="button" id="edit${task.id}" class="btn btn-info">Edit</button></div>`;
-            })
-            .join("");
-    }
+			})
+			.join("");
+	}
 };
 
 addTaskInput.addEventListener("keyup", (e) => {
-    if (e.keyCode === 13) {
-        addTask();
-        addTaskInput.value = "";
-    }
+	if (e.keyCode === 13) {
+		addTask();
+		addTaskInput.value = "";
+	}
 });
 
 const renderPagesData = (initialData) => {
-    let singlePageData = [];
-    let counter = 0;
+	let singlePageData = [];
+	let counter = 0;
 
-    pagesData = [];
-    initialData.forEach((task, index) => {
-        counter++;
-        singlePageData.push(task);
-        if (counter === 5 || index === initialData.length - 1) {
-            pagesData.push(singlePageData);
-            counter = 0;
-            singlePageData = [];
-        }
+	pagesData = [];
+	initialData.forEach((task, index) => {
+		counter++;
+		singlePageData.push(task);
+		if (counter === 5 || index === initialData.length - 1) {
+			pagesData.push(singlePageData);
+			counter = 0;
+			singlePageData = [];
+		}
+	});
+	// console.log(indexControl);
 
+	console.log('------initialData.length)', initialData.length);
+	console.log('------Math.ceil(initialData.length / 5)', Math.ceil(initialData.length / 5));
 
-    });
-    // if(initialData.length % 5 === 0) {}
+	paginationBtnWrapper.innerHTML = '';
 
-    let ident = initialData.length % 5 === 0
-    paginationBtnWrapper.innerHTML = initialData // aq gvWirdeba cvlilebebi !! გავჩერდით აქ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        .map((singlePageList, index) => {
-               return (
-                   `<button id="paginationBtn${index}" class="btn btn-default" onclick=changePage(${index})> 
-                ${index + 1}
-                </button>`
-               );
+	for (let i = 1; i <= Math.ceil(initialData.length / 5); i++) {
+		console.log('--------i', i);
+		const paginationBtn = document.createElement('button');
+		paginationBtn.innerText = i;
+		paginationBtn.addEventListener('click', () => {
+			console.log('--------------i', i)
+		});
 
-        })
-        .join("")
+		paginationBtnWrapper.append(paginationBtn)
+	}
+	// paginationBtnWrapper.innerHTML = initialData
+	// 	.map((singlePageList, index) => {
+	// 		return (
+	// 			`<button id="paginationBtn${index}" class="btn btn-default" onclick=changePage(${index})>
+  //       	${index + 1}
+  //       </button>`
+	// 		);
+	// 	})
+	// 	.join("");
 
-    showTask();
+	showTask();
 
 };
 
 
-
-
 const editHandler = (identifier) => {
-    const inputForEdit = document.getElementById(`ident${identifier}`);
-    const editBtn = document.getElementById(`edit${identifier}`);
-    const initialValue = document.getElementById(`changedValue${identifier}`);
-    const removeButton = document.getElementById(`remove${identifier}`);
+	const inputForEdit = document.getElementById(`ident${identifier}`);
+	const editBtn = document.getElementById(`edit${identifier}`);
+	const initialValue = document.getElementById(`changedValue${identifier}`);
+	const removeButton = document.getElementById(`remove${identifier}`);
 
-    if (editBtn.innerHTML === 'Edit') {
-        editBtn.innerHTML = "Save";
-        removeButton.innerHTML = "Cancel";
-        initialValue.classList.add("hideItem");
-        inputForEdit.classList.remove("hideItem");
-    } else if (editBtn.innerHTML === "Save" && inputForEdit.value.length > 0) {
-        editBtn.innerHTML = "Edit";
-        removeButton.innerHTML = "Remove";
-        inputForEdit.classList.add("hideItem");
-        initialValue.classList.remove("hideItem");
-        initialValue.innerHTML = inputForEdit.value;
-        initialTaskData.find((data) => {
-            if (data.id === identifier) {
-                data.task = inputForEdit.value;
-            }
-        });
-    }
+	if (editBtn.innerHTML === 'Edit') {
+		editBtn.innerHTML = "Save";
+		removeButton.innerHTML = "Cancel";
+		initialValue.classList.add("hideItem");
+		inputForEdit.classList.remove("hideItem");
+	} else if (editBtn.innerHTML === "Save" && inputForEdit.value.length > 0) {
+		editBtn.innerHTML = "Edit";
+		removeButton.innerHTML = "Remove";
+		inputForEdit.classList.add("hideItem");
+		initialValue.classList.remove("hideItem");
+		initialValue.innerHTML = inputForEdit.value;
+		initialTaskData.find((data) => {
+			if (data.id === identifier) {
+				data.task = inputForEdit.value;
+			}
+		});
+	}
 
 
 };
 // Item Removing
 const removeBtn = (identifier) => {
-    console.log(indexControl, Number(initialTaskData.length))
+	console.log(indexControl, Number(initialTaskData.length));
 
-    console.log(indexControl)
+	console.log(indexControl);
 
 
-    if(indexControl === Number(initialTaskData.length - 1)) {
-        indexControl = indexControl - 5
-        console.log(indexControl)
-        console.log('kslamsk')
+	if (indexControl === Number(initialTaskData.length - 1)) {
+		indexControl = indexControl - 5;
+		console.log(indexControl);
+		console.log('kslamsk');
 
-    }
-    const removeButton = document.getElementById(`remove${identifier}`);
+	}
+	const removeButton = document.getElementById(`remove${identifier}`);
 
-    initialTaskData = initialTaskData.filter((items) => {
+	initialTaskData = initialTaskData.filter((items) => {
 
-        if (removeButton.innerHTML === "Remove") {
-            return items.id !== identifier;
-        } else {
-            return items;
-        }
+		if (removeButton.innerHTML === "Remove") {
+			return items.id !== identifier;
+		} else {
+			return items;
+		}
 
-    });
-    renderPagesData(initialTaskData);
-    changePage(onPageControler - 1);
+	});
+	renderPagesData(initialTaskData);
+	changePage(onPageControler - 1);
 };
 
 const onCheckBox = (identifier) => {
-    const checkBox = document.getElementById(`checkBox${identifier}`);
-    const initialValue = document.getElementById(`changedValue${identifier}`);
-    if (checkBox.checked === true) {
-        initialValue.classList.add('done');
-    } else {
-        initialValue.classList.remove('done');
-    }
+	const checkBox = document.getElementById(`checkBox${identifier}`);
+	const initialValue = document.getElementById(`changedValue${identifier}`);
+	if (checkBox.checked === true) {
+		initialValue.classList.add('done');
+	} else {
+		initialValue.classList.remove('done');
+	}
 };
