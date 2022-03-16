@@ -9,11 +9,14 @@ let initialTaskData = [];
 
 let numCount = 0;
 let indexControl = 0;
-const showTask = () => { // გვჭირდება სწორი ინდიკატორი, ედთასკი ვერ ფილტრავს სათანადოდ
+const showTask = () => {
 	numCount = numCount + 1;
+	const lastElement = paginationBtnWrapper.lastChild;
+	// lastElement.classList.add('active')
 
 
-//-- IndexControl უნდა შემცირდეს, როდესაც ბოლო ფეიჯის ბოლო აითემი წაიშლება.
+
+
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML =
 			initialTaskData.slice(indexControl, initialTaskData.length)
@@ -32,9 +35,7 @@ const showTask = () => { // გვჭირდება სწორი ინ�
 };
 
 
-const renderItems = () => {
 
-}
 
 const addTask = () => {
 	if (numCount > 4) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
@@ -62,8 +63,13 @@ const addTask = () => {
 let onPageControler;
 
 const changePage = (pageNumber) => {
+	console.log('changePage works!!')
+	console.log(pageNumber)
 	const paginationBtn = document.getElementById(`paginationBtn${pageNumber}`);
 	const globalPaginationBtn = document.querySelectorAll(".btn-default");
+
+	console.log(paginationBtn)
+	console.log(pageNumber)
 
 	if (paginationBtn) {
 		globalPaginationBtn.forEach((button) => {
@@ -71,20 +77,41 @@ const changePage = (pageNumber) => {
 
 		});
 		onPageControler = paginationBtn.innerHTML;
-		if (Number(paginationBtn.innerHTML) === pageNumber + 1) {
+
+		if (Number(paginationBtn.innerHTML) === pageNumber) {
 			paginationBtn.classList.add("active");
+			console.log('eeeeeeeeee')
 		}
 
-	} else {
+	}
+	else {
 		const lastElement = paginationBtnWrapper.lastChild;
+		console.log(lastElement)
 		if (lastElement) {
 			let akk = lastElement.textContent;
 			onPageControler = Number(akk);
 			lastElement.classList.add("active");
 		}
 	}
+
+	let cont;
+	if(pageNumber === 1) {
+		cont = 0
+	}if(pageNumber === 2) {
+		cont = 5
+	}if(pageNumber === 3) {
+		cont = 10
+	}if(pageNumber === 4) {
+		cont = 15
+	}if(pageNumber === 5) {
+		cont = 20
+	}if(pageNumber === 6) {
+		cont = 25
+	}if(pageNumber === 7) {
+		cont = 30
+	}
 	if (initialTaskData.length >= 0) {
-		taskList.innerHTML = pagesData[pageNumber]
+		taskList.innerHTML = initialTaskData.slice(cont, cont+5)
 			.map((task) => {
 				return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
                 <input onclick=onCheckBox(${task.id}) id="checkBox${task.id}" type="checkbox" /> 
@@ -104,20 +131,7 @@ addTaskInput.addEventListener("keyup", (e) => {
 });
 
 const renderPagesData = (initialData) => {
-	let singlePageData = [];
-	let counter = 0;
 
-	pagesData = [];
-	initialData.forEach((task, index) => {
-		counter++;
-		singlePageData.push(task);
-		if (counter === 5 || index === initialData.length - 1) {
-			pagesData.push(singlePageData);
-			counter = 0;
-			singlePageData = [];
-		}
-	});
-	// console.log(indexControl);
 
 	console.log('------initialData.length)', initialData.length);
 	console.log('------Math.ceil(initialData.length / 5)', Math.ceil(initialData.length / 5));
@@ -128,8 +142,11 @@ const renderPagesData = (initialData) => {
 		console.log('--------i', i);
 		const paginationBtn = document.createElement('button');
 		paginationBtn.innerText = i;
+		paginationBtn.setAttribute('class', 'btn btn-default')
+		paginationBtn.setAttribute('id', `paginationBtn${i}`)
 		paginationBtn.addEventListener('click', () => {
-			console.log('--------------i', i)
+			changePage(i)
+
 		});
 
 		paginationBtnWrapper.append(paginationBtn)
@@ -177,17 +194,8 @@ const editHandler = (identifier) => {
 };
 // Item Removing
 const removeBtn = (identifier) => {
-	console.log(indexControl, Number(initialTaskData.length));
-
-	console.log(indexControl);
 
 
-	if (indexControl === Number(initialTaskData.length - 1)) {
-		indexControl = indexControl - 5;
-		console.log(indexControl);
-		console.log('kslamsk');
-
-	}
 	const removeButton = document.getElementById(`remove${identifier}`);
 
 	initialTaskData = initialTaskData.filter((items) => {
@@ -199,8 +207,10 @@ const removeBtn = (identifier) => {
 		}
 
 	});
+
+	changePage(onPageControler);
 	renderPagesData(initialTaskData);
-	changePage(onPageControler - 1);
+
 };
 
 const onCheckBox = (identifier) => {
