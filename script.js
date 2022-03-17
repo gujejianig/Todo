@@ -4,24 +4,21 @@ const paginationBtnWrapper = document.getElementById(
 	"pagination-buttons-wrapper"
 );
 
+
 let getIndex;
 let initialTaskData = [];
 
 let numCount = 0;
 let indexControl = 0;
 const showTask = () => {
+	console.log('showTask')
+
 	numCount = numCount + 1;
-	const lastElement = paginationBtnWrapper.lastChild;
-	// lastElement.classList.add('active')
-
-
-
-
+	console.log(indexControl)
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML =
 			initialTaskData.slice(indexControl, initialTaskData.length)
 				?.map((task, index) => {
-
 					getIndex = index;
 					return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
                 <input onclick=onCheckBox(${task.id}) id="checkBox${task.id}" type="checkbox" /> 
@@ -35,9 +32,11 @@ const showTask = () => {
 };
 
 
-
-
 const addTask = () => {
+	console.log('addTask')
+
+	items.push(items[items.length - 1] + 5);
+
 	if (numCount > 4) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 		numCount = 0;
 		indexControl = indexControl + 5; // როდის უნდა გაიზარდოს?!?!?!?!
@@ -46,9 +45,7 @@ const addTask = () => {
 		initialTaskData.push({task: addTaskInput.value, id: Date.now()});
 		addTaskInput.value = "";
 		renderPagesData(initialTaskData);
-
 	}
-
 
 	const lastElement = paginationBtnWrapper.lastChild;
 	if (lastElement) {
@@ -61,32 +58,30 @@ const addTask = () => {
 };
 
 let onPageControler;
+let cont;
+const items = [0, 5, 10, 15, 20, 25, 30, 35, 40,];
 
 const changePage = (pageNumber) => {
-	console.log('changePage works!!')
-	console.log(pageNumber)
-	const paginationBtn = document.getElementById(`paginationBtn${pageNumber}`);
+console.log('changePage')
+
+	let paginationBtn = document.getElementById(`paginationBtn${pageNumber}`);
 	const globalPaginationBtn = document.querySelectorAll(".btn-default");
 
-	console.log(paginationBtn)
-	console.log(pageNumber)
-
 	if (paginationBtn) {
-		globalPaginationBtn.forEach((button) => {
+			globalPaginationBtn.forEach((button) => {
 			button.classList.remove("active");
+
 
 		});
 		onPageControler = paginationBtn.innerHTML;
 
 		if (Number(paginationBtn.innerHTML) === pageNumber) {
 			paginationBtn.classList.add("active");
-			console.log('eeeeeeeeee')
+			console.log('this works');
 		}
-
-	}
-	else {
+	} else {
 		const lastElement = paginationBtnWrapper.lastChild;
-		console.log(lastElement)
+		console.log(lastElement);
 		if (lastElement) {
 			let akk = lastElement.textContent;
 			onPageControler = Number(akk);
@@ -94,24 +89,9 @@ const changePage = (pageNumber) => {
 		}
 	}
 
-	let cont;
-	if(pageNumber === 1) {
-		cont = 0
-	}if(pageNumber === 2) {
-		cont = 5
-	}if(pageNumber === 3) {
-		cont = 10
-	}if(pageNumber === 4) {
-		cont = 15
-	}if(pageNumber === 5) {
-		cont = 20
-	}if(pageNumber === 6) {
-		cont = 25
-	}if(pageNumber === 7) {
-		cont = 30
-	}
+
 	if (initialTaskData.length >= 0) {
-		taskList.innerHTML = initialTaskData.slice(cont, cont+5)
+		taskList.innerHTML = initialTaskData.slice(items[onPageControler - 1], items[onPageControler - 1] + 5)
 			.map((task) => {
 				return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
                 <input onclick=onCheckBox(${task.id}) id="checkBox${task.id}" type="checkbox" /> 
@@ -121,6 +101,8 @@ const changePage = (pageNumber) => {
 			})
 			.join("");
 	}
+
+
 };
 
 addTaskInput.addEventListener("keyup", (e) => {
@@ -132,34 +114,25 @@ addTaskInput.addEventListener("keyup", (e) => {
 
 const renderPagesData = (initialData) => {
 
+	console.log('renderPaage')
 
-	console.log('------initialData.length)', initialData.length);
-	console.log('------Math.ceil(initialData.length / 5)', Math.ceil(initialData.length / 5));
 
 	paginationBtnWrapper.innerHTML = '';
 
-	for (let i = 1; i <= Math.ceil(initialData.length / 5); i++) {
+	for (let i = 1; i <= Math.ceil(initialTaskData.length / 5); i++) {
 		console.log('--------i', i);
+		console.log('fffffffffffffffffffffffffffffffffff');
 		const paginationBtn = document.createElement('button');
-		paginationBtn.innerText = i;
-		paginationBtn.setAttribute('class', 'btn btn-default')
-		paginationBtn.setAttribute('id', `paginationBtn${i}`)
+		paginationBtn.innerHTML = i;
+		paginationBtn.setAttribute('class', 'btn btn-default');
+		paginationBtn.setAttribute('id', `paginationBtn${i}`);
 		paginationBtn.addEventListener('click', () => {
-			changePage(i)
+			changePage(i);
 
 		});
 
-		paginationBtnWrapper.append(paginationBtn)
+		paginationBtnWrapper.append(paginationBtn);
 	}
-	// paginationBtnWrapper.innerHTML = initialData
-	// 	.map((singlePageList, index) => {
-	// 		return (
-	// 			`<button id="paginationBtn${index}" class="btn btn-default" onclick=changePage(${index})>
-  //       	${index + 1}
-  //       </button>`
-	// 		);
-	// 	})
-	// 	.join("");
 
 	showTask();
 
@@ -195,7 +168,7 @@ const editHandler = (identifier) => {
 // Item Removing
 const removeBtn = (identifier) => {
 
-
+indexControl--
 	const removeButton = document.getElementById(`remove${identifier}`);
 
 	initialTaskData = initialTaskData.filter((items) => {
@@ -208,8 +181,10 @@ const removeBtn = (identifier) => {
 
 	});
 
+	// renderPagesData(initialTaskData);
 	changePage(onPageControler);
-	renderPagesData(initialTaskData);
+	console.log(onPageControler);
+
 
 };
 
