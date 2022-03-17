@@ -8,6 +8,10 @@ const paginationBtnWrapper = document.getElementById(
 let getIndex;
 let initialTaskData = [];
 
+let onPageControler = 1
+let cont;
+const items = [0, 5, 10, 15, 20, 25, 30, 35, 40,];
+const showItems = [0, 5, 10, 15, 20, 25, 30, 35, 40,]
 let numCount = 0;
 let indexControl = 0;
 const showTask = () => {
@@ -15,9 +19,21 @@ const showTask = () => {
 
 	numCount = numCount + 1;
 	console.log(indexControl)
+	console.log(initialTaskData.length)
+
+	const lastElement = paginationBtnWrapper.lastChild;
+	if (lastElement) {
+		lastElement.classList.add("active");
+	}
+
+	onPageControler = Number(lastElement.textContent);
+
+	console.log(onPageControler)
+
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML =
-			initialTaskData.slice(indexControl, initialTaskData.length)
+
+			initialTaskData.slice(showItems[onPageControler - 1], showItems[onPageControler])
 				?.map((task, index) => {
 					getIndex = index;
 					return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
@@ -41,6 +57,9 @@ const addTask = () => {
 		numCount = 0;
 		indexControl = indexControl + 5; // როდის უნდა გაიზარდოს?!?!?!?!
 	}
+	if(indexControl > initialTaskData.length) {
+		indexControl = indexControl - 5
+	}
 	if (addTaskInput.value.trim().length !== 0) {
 		initialTaskData.push({task: addTaskInput.value, id: Date.now()});
 		addTaskInput.value = "";
@@ -57,9 +76,6 @@ const addTask = () => {
 
 };
 
-let onPageControler;
-let cont;
-const items = [0, 5, 10, 15, 20, 25, 30, 35, 40,];
 
 const changePage = (pageNumber) => {
 console.log('changePage')
@@ -74,7 +90,6 @@ console.log('changePage')
 
 		});
 		onPageControler = paginationBtn.innerHTML;
-
 		if (Number(paginationBtn.innerHTML) === pageNumber) {
 			paginationBtn.classList.add("active");
 			console.log('this works');
@@ -168,20 +183,20 @@ const editHandler = (identifier) => {
 // Item Removing
 const removeBtn = (identifier) => {
 
-indexControl--
+
 	const removeButton = document.getElementById(`remove${identifier}`);
 
-	initialTaskData = initialTaskData.filter((items) => {
+	initialTaskData = initialTaskData.filter((item) => {
 
 		if (removeButton.innerHTML === "Remove") {
-			return items.id !== identifier;
+			return item.id !== identifier;
 		} else {
-			return items;
+			return item;
 		}
 
 	});
 
-	// renderPagesData(initialTaskData);
+	renderPagesData(initialTaskData);
 	changePage(onPageControler);
 	console.log(onPageControler);
 
