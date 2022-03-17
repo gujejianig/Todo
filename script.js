@@ -8,27 +8,37 @@ const paginationBtnWrapper = document.getElementById(
 let getIndex;
 let initialTaskData = [];
 
-let onPageControler = 1
-let cont;
+let onPageControler = 1;
 const items = [0, 5, 10, 15, 20, 25, 30, 35, 40,];
-const showItems = [0, 5, 10, 15, 20, 25, 30, 35, 40,]
+const showItems = [0, 5, 10, 15, 20, 25, 30, 35, 40,];
 let numCount = 0;
 let indexControl = 0;
 const showTask = () => {
-	console.log('showTask')
+	console.log('showTask');
 
 	numCount = numCount + 1;
-	console.log(indexControl)
-	console.log(initialTaskData.length)
+	console.log(indexControl);
+	console.log(initialTaskData.length);
 
 	const lastElement = paginationBtnWrapper.lastChild;
+
+
+	console.log('onpageControler', onPageControler)
+
 	if (lastElement) {
-		lastElement.classList.add("active");
+		onPageControler = Number(lastElement.textContent);
 	}
 
-	onPageControler = Number(lastElement.textContent);
+	if (lola !== 0) {
+		onPageControler = Number(lola);
+		console.log('lola:', lola);
+	}
+	console.log(lola);
 
-	console.log(onPageControler)
+
+	// onPageControler = Number(lastElement.textContent);
+
+	console.log(onPageControler);
 
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML =
@@ -49,16 +59,19 @@ const showTask = () => {
 
 
 const addTask = () => {
-	console.log('addTask')
+	const last = paginationBtnWrapper.lastChild;
+	if (last) {
+		onPageControler = Number(last.textContent);
 
+	}
 	items.push(items[items.length - 1] + 5);
 
 	if (numCount > 4) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 		numCount = 0;
 		indexControl = indexControl + 5; // როდის უნდა გაიზარდოს?!?!?!?!
 	}
-	if(indexControl > initialTaskData.length) {
-		indexControl = indexControl - 5
+	if (indexControl > initialTaskData.length) {
+		indexControl = indexControl - 5;
 	}
 	if (addTaskInput.value.trim().length !== 0) {
 		initialTaskData.push({task: addTaskInput.value, id: Date.now()});
@@ -75,16 +88,18 @@ const addTask = () => {
 
 
 };
-
+var lola = 0;
 
 const changePage = (pageNumber) => {
-console.log('changePage')
-
+	console.log('changePage');
 	let paginationBtn = document.getElementById(`paginationBtn${pageNumber}`);
+	lola = paginationBtn.innerHTML;
+	console.log(paginationBtn);
+	console.log(lola);
 	const globalPaginationBtn = document.querySelectorAll(".btn-default");
-
+	lola = paginationBtn.innerHTML;
 	if (paginationBtn) {
-			globalPaginationBtn.forEach((button) => {
+		globalPaginationBtn.forEach((button) => {
 			button.classList.remove("active");
 
 
@@ -94,15 +109,19 @@ console.log('changePage')
 			paginationBtn.classList.add("active");
 			console.log('this works');
 		}
-	} else {
-		const lastElement = paginationBtnWrapper.lastChild;
-		console.log(lastElement);
-		if (lastElement) {
-			let akk = lastElement.textContent;
-			onPageControler = Number(akk);
-			lastElement.classList.add("active");
-		}
 	}
+	paginationBtn.classList.add("active");
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! შესაძლო ბაგებისთვის
+	// else {
+	// 	const lastElement = paginationBtnWrapper.lastChild;
+	// 	console.log(lastElement);
+	// 	if (lastElement) {
+	// 		let akk = lastElement.textContent;
+	// 		onPageControler = Number(akk);
+	// 		lastElement.classList.add("active");
+	// 	}
+	// }
 
 
 	if (initialTaskData.length >= 0) {
@@ -129,7 +148,7 @@ addTaskInput.addEventListener("keyup", (e) => {
 
 const renderPagesData = (initialData) => {
 
-	console.log('renderPaage')
+	console.log('renderPaage');
 
 
 	paginationBtnWrapper.innerHTML = '';
