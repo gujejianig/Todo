@@ -15,23 +15,29 @@ const showTask = () => {
 	const lastElement = paginationBtnWrapper.lastChild;
 
 
-	console.log('paginationManage',paginationManage)
-	console.log(ACTIVE_PAGE)
+	// console.log('paginationManage',paginationManage)
+	console.log('ACTIVEPAGE: ', ACTIVE_PAGE)
+
 
 	let start = rowsParePage * ACTIVE_PAGE
 	let end = start + rowsParePage
-	console.log(start, end)
+	console.log(start, end) // <--------------- კონვერტაციის შემდგომ ხდება აქთივფეიჯის გადაკეთება, სწორედ ამიტომ   არ    მუშაობს
+
 	if (paginationManage === 0 || paginationManage === Number(lastElement.textContent) || paginationManage - 1 === Number(lastElement.textContent)) {
+		// console.log('lastContent: ', lastElement.textContent)
 		ACTIVE_PAGE = Number(lastElement.textContent);
+		console.log('ACTIVEPAGE: ', ACTIVE_PAGE)
+
 		paginationManage = 0;
-		console.log('working if')
+		// console.log('working if')
 	}
-	  else if (paginationManage !== Number(lastElement.textContent)) {
+	else if (paginationManage !== Number(lastElement.textContent)) {
 		ACTIVE_PAGE = paginationManage;
 		paginationManage = 0;
-		console.log('working else if')
+		// console.log('working else if')
 
 	}
+
 
 
 	if (initialTaskData.length >= 0) {
@@ -71,9 +77,6 @@ const addTask = () => {
 	if (lastElement) {
 		lastElement.classList.add("active");
 	}
-
-
-
 	ACTIVE_PAGE = Number(lastElement.textContent)
 };
 let paginationManage = 0;
@@ -98,8 +101,8 @@ const changePage = (pageNumber) => {
 
 	let start = rowsParePage * (ACTIVE_PAGE - 1)
 	let end = start + rowsParePage
-	console.log(start, end)
-	console.log(activePage)
+	// console.log(start, end)
+	// console.log(activePage)
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML = initialTaskData.slice(start, end)
 			.map((task) => {
@@ -117,14 +120,14 @@ const changePage = (pageNumber) => {
 
 };
 
-	addTaskInput.addEventListener("keyup", (e) => {
-		if (e.keyCode === 13) {
-			addTask();
-			addTaskInput.value = "";
-		}
-	});
+addTaskInput.addEventListener("keyup", (e) => {
+	if (e.keyCode === 13) {
+		addTask();
+		addTaskInput.value = "";
+	}
+});
 
-	const renderPagesData = () => {
+const renderPagesData = () => {
 
 
 	paginationBtnWrapper.innerHTML = '';
@@ -141,7 +144,7 @@ const changePage = (pageNumber) => {
 	}
 
 	showTask();
-	};
+};
 
 
 const editHandler = (identifier) => {
