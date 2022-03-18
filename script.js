@@ -16,30 +16,28 @@ let indexControl = 0;
 const showTask = () => {
 	console.log('showTask');
 
-	numCount = numCount + 1;
-	console.log(indexControl);
-	console.log(initialTaskData.length);
+
 
 	const lastElement = paginationBtnWrapper.lastChild;
-
-
-	console.log('onpageControler', onPageControler)
-
 
 
 	if (lola === 0 || lola === Number(lastElement.textContent) || lola - 1 === Number(lastElement.textContent)) {
 		// onPageControler = Number(lola);
 		// console.log('lola:', lola);
-		onPageControler = Number(lastElement.textContent)
-	}
+		onPageControler = Number(lastElement.textContent);
+		lola = 0;
 
-	else if (lola !== Number(lastElement.textContent) ) {
-		onPageControler = lola
+	} else if (lola !== Number(lastElement.textContent)) {
+		onPageControler = lola;
+		console.log('working els eif');
+		lola = 0;
 	}
 
 	// onPageControler = Number(lastElement.textContent);
+	console.log('lola:', lola);
+	console.log('lastElement:', lastElement.textContent);
 
-	console.log(onPageControler);
+	console.log('onpageControler', onPageControler);
 
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML =
@@ -60,10 +58,7 @@ const showTask = () => {
 
 const addTask = () => {
 	const last = paginationBtnWrapper.lastChild;
-	if (last) {
-		onPageControler = Number(last.textContent);
 
-	}
 	items.push(items[items.length - 1] + 5);
 
 	if (numCount > 4) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
@@ -86,7 +81,10 @@ const addTask = () => {
 
 	onPageControler = Number(lastElement.textContent);
 
+	if (last) {
+		onPageControler = Number(last.textContent);
 
+	}
 };
 let lola = 0;
 
@@ -94,8 +92,8 @@ const changePage = (pageNumber) => {
 	console.log('changePage');
 	let paginationBtn = document.getElementById(`paginationBtn${pageNumber}`);
 	lola = paginationBtn.innerHTML;
-	console.log(paginationBtn);
-	console.log(lola);
+	// console.log(paginationBtn);
+	console.log('lola', lola);
 	const globalPaginationBtn = document.querySelectorAll(".btn-default");
 	lola = paginationBtn.innerHTML;
 	if (paginationBtn) {
