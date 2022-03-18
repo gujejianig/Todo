@@ -25,16 +25,17 @@ const showTask = () => {
 
 	console.log('onpageControler', onPageControler)
 
-	if (lastElement) {
-		onPageControler = Number(lastElement.textContent);
+
+
+	if (lola === 0 || lola === Number(lastElement.textContent) || lola - 1 === Number(lastElement.textContent)) {
+		// onPageControler = Number(lola);
+		// console.log('lola:', lola);
+		onPageControler = Number(lastElement.textContent)
 	}
 
-	if (lola !== 0) {
-		onPageControler = Number(lola);
-		console.log('lola:', lola);
+	else if (lola !== Number(lastElement.textContent) ) {
+		onPageControler = lola
 	}
-	console.log(lola);
-
 
 	// onPageControler = Number(lastElement.textContent);
 
@@ -42,7 +43,6 @@ const showTask = () => {
 
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML =
-
 			initialTaskData.slice(showItems[onPageControler - 1], showItems[onPageControler])
 				?.map((task, index) => {
 					getIndex = index;
@@ -88,7 +88,7 @@ const addTask = () => {
 
 
 };
-var lola = 0;
+let lola = 0;
 
 const changePage = (pageNumber) => {
 	console.log('changePage');
