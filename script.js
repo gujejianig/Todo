@@ -3,27 +3,34 @@ const taskList = document.getElementById("tasks-list");
 const paginationBtnWrapper = document.getElementById("pagination-buttons-wrapper");
 let getIndex;
 let initialTaskData = [];
-let onPageControler = 1;
+let ACTIVE_PAGE = 1;
 let activePage = 1;
 let numCount = 0;
 let indexControl = 0;
 
 const rowsParePage = 5
 const showTask = () => {
-	activePage--
-	console.log(activePage)
-
-	let start = rowsParePage * activePage
-	let end = start + rowsParePage
+	ACTIVE_PAGE--
 
 	const lastElement = paginationBtnWrapper.lastChild;
-	if (paginationManage === 0 || paginationManage === Number(lastElement.textContent) || paginationManage - 1 === Number(lastElement.textContent)) {
-		onPageControler = Number(lastElement.textContent);
-		paginationManage = 0;
 
-	} else if (paginationManage !== Number(lastElement.textContent)) {
-		onPageControler = paginationManage;
+
+	console.log('paginationManage',paginationManage)
+	console.log(ACTIVE_PAGE)
+
+	let start = rowsParePage * ACTIVE_PAGE
+	let end = start + rowsParePage
+	console.log(start, end)
+	if (paginationManage === 0 || paginationManage === Number(lastElement.textContent) || paginationManage - 1 === Number(lastElement.textContent)) {
+		ACTIVE_PAGE = Number(lastElement.textContent);
 		paginationManage = 0;
+		console.log('working if')
+	}
+	  else if (paginationManage !== Number(lastElement.textContent)) {
+		ACTIVE_PAGE = paginationManage;
+		paginationManage = 0;
+		console.log('working else if')
+
 	}
 
 
@@ -43,12 +50,13 @@ const showTask = () => {
 };
 
 const addTask = () => {
-	const last = paginationBtnWrapper.lastChild;
+	// const last = paginationBtnWrapper.lastChild;
 
 
 	if (numCount > 4) {
 		numCount = 0;
 		indexControl = indexControl + 5;
+
 	}
 	if (indexControl > initialTaskData.length) {
 		indexControl = indexControl - 5;
@@ -64,36 +72,31 @@ const addTask = () => {
 		lastElement.classList.add("active");
 	}
 
-	onPageControler = Number(lastElement.textContent);
 
-	if (last) {
-		onPageControler = Number(last.textContent);
 
-	}
-	activePage = Number(lastElement.textContent)
+	ACTIVE_PAGE = Number(lastElement.textContent)
 };
 let paginationManage = 0;
 
 const changePage = (pageNumber) => {
 
-	activePage = pageNumber
+
 	let paginationBtn = document.getElementById(`paginationBtn${pageNumber}`);
-	paginationManage = paginationBtn.innerHTML;
+	paginationManage = Number(paginationBtn.innerHTML);
 	const globalPaginationBtn = document.querySelectorAll(".btn-default");
-	paginationManage = paginationBtn.innerHTML;
 	if (paginationBtn) {
 		globalPaginationBtn.forEach((button) => {
 			button.classList.remove("active");
 
 		});
-		onPageControler = paginationBtn.innerHTML;
+		ACTIVE_PAGE = paginationBtn.innerHTML;
 		if (Number(paginationBtn.innerHTML) === pageNumber) {
 			paginationBtn.classList.add("active");
 		}
 	}
 	paginationBtn.classList.add("active");
 
-	let start = rowsParePage * (activePage - 1)
+	let start = rowsParePage * (ACTIVE_PAGE - 1)
 	let end = start + rowsParePage
 	console.log(start, end)
 	console.log(activePage)
@@ -185,7 +188,7 @@ const removeBtn = (identifier) => {
 	});
 
 	renderPagesData(initialTaskData);
-	changePage(onPageControler);
+	changePage(ACTIVE_PAGE);
 
 };
 
