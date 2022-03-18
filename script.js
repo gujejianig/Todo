@@ -27,7 +27,6 @@ const showTask = () => {
 		// console.log('lastContent: ', lastElement.textContent)
 		ACTIVE_PAGE = Number(lastElement.textContent);
 		console.log('ACTIVEPAGE: ', ACTIVE_PAGE)
-
 		paginationManage = 0;
 		// console.log('working if')
 	}
