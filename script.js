@@ -136,7 +136,7 @@ const removeBtn = (identifier) => {
 
 	});
 
-	// renderPagesData();
+	renderPagesData();
 	changePage(ACTIVE_PAGE);
 	console.log(ACTIVE_PAGE)
 
