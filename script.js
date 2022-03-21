@@ -4,7 +4,7 @@ const paginationBtnWrapper = document.getElementById("pagination-buttons-wrapper
 let getIndex;
 let initialTaskData = [];
 let ACTIVE_PAGE = 1;
-const rowsParePage = 5
+const rowsParePage = 5;
 
 const addTask = () => {
 	if (addTaskInput.value.trim().length !== 0) {
@@ -19,12 +19,12 @@ const addTask = () => {
 	}
 
 	// const lastElement = paginationBtnWrapper.lastChild;
-	ACTIVE_PAGE = Number(lastElement.textContent)
+	ACTIVE_PAGE = Number(lastElement.textContent);
 
-	let start = rowsParePage * (ACTIVE_PAGE - 1) // სლაისიც პირველი ელემენტი
-	let end = start + rowsParePage // სლაისის მეორე ელემენტი
+	let start = rowsParePage * (ACTIVE_PAGE - 1); // სლაისიც პირველი ელემენტი
+	let end = start + rowsParePage; // სლაისის მეორე ელემენტი
 
-	console.log(start, end)
+	console.log(start, end);
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML = initialTaskData.slice(start, end)
 			?.map((task, index) => {
@@ -40,21 +40,34 @@ const addTask = () => {
 	}
 };
 const changePage = (pageNumber) => {
-	console.log('pageNumber',pageNumber)
-	ACTIVE_PAGE = pageNumber
+	const lastElement = paginationBtnWrapper.lastChild;
+
+	console.log('pageNumber', pageNumber);
+	ACTIVE_PAGE = pageNumber;
 	let allPaginationButton = document.querySelectorAll(".paginationButton");
 	if (allPaginationButton) {
 		allPaginationButton.forEach((button) => {
 			button.classList.remove("active");
-		})
+		});
 	}
-	let activeButton = paginationBtnWrapper.children.item(pageNumber - 1)
+	let activeButton = paginationBtnWrapper.children.item(pageNumber - 1);
 	if (activeButton) {
-		activeButton.classList.add('active')
+		activeButton.classList.add('active');
+	}
+	console.log(ACTIVE_PAGE - 1);
+
+	console.log(initialTaskData.length % 5 === 0);
+	// console.log(pageNumber === Number(lastElement.textContent))
+
+	if (lastElement && pageNumber - 1 === Number(lastElement.textContent) && initialTaskData.length % 5 === 0) {
+		ACTIVE_PAGE--;
+		lastElement.classList.add('active');
+
 	}
 
-	let start = rowsParePage * (ACTIVE_PAGE - 1)
-	let end = start + rowsParePage
+	let start = rowsParePage * (ACTIVE_PAGE - 1);
+	let end = start + rowsParePage;
+	console.log(start, end);
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML = initialTaskData.slice(start, end)
 			.map((task) => {
@@ -138,7 +151,7 @@ const removeBtn = (identifier) => {
 
 	renderPagesData();
 	changePage(ACTIVE_PAGE);
-	console.log(ACTIVE_PAGE)
+	console.log(ACTIVE_PAGE);
 
 
 };
