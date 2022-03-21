@@ -39,7 +39,7 @@ const addTask = () => {
 };
 const changePage = (pageNumber) => {
 	const lastElement = paginationBtnWrapper.lastChild;
-
+	let activeButton = paginationBtnWrapper.children.item(pageNumber - 1);
 	active_page_index = pageNumber;
 	let allPaginationButton = document.querySelectorAll(".paginationButton");
 	if (allPaginationButton) {
@@ -47,13 +47,12 @@ const changePage = (pageNumber) => {
 			button.classList.remove("active");
 		});
 	}
-	let activeButton = paginationBtnWrapper.children.item(pageNumber - 1);
+
 	if (activeButton) {
 		activeButton.classList.add('active');
 	}
 
-
-	if (lastElement && pageNumber - 1 === Number(lastElement.textContent) && initialTaskData.length % 5 === 0) { // If the active button is the last button and the last item is deleted - (I think its bad practise, need Feedback)
+	if (lastElement && pageNumber - 1 === Number(lastElement.textContent) && initialTaskData.length % 5 === 0) { // If the active button is the last button and the last item is deleted
 		active_page_index--;
 		lastElement.classList.add('active');
 	}
@@ -72,8 +71,6 @@ const changePage = (pageNumber) => {
 			})
 			.join("");
 	}
-
-
 };
 
 addTaskInput.addEventListener("keyup", (e) => {
@@ -82,7 +79,6 @@ addTaskInput.addEventListener("keyup", (e) => {
 		addTaskInput.value = "";
 	}
 });
-
 
 const renderPagesData = () => {
 	paginationBtnWrapper.innerHTML = '';
@@ -133,7 +129,6 @@ const removeBtn = (identifier) => {
 			return item;
 		}
 	});
-
 	renderPagesData();
 	changePage(active_page_index);
 };
