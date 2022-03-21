@@ -4,41 +4,27 @@ const paginationBtnWrapper = document.getElementById("pagination-buttons-wrapper
 let getIndex;
 let initialTaskData = [];
 let ACTIVE_PAGE = 1;
-let activePage = 1;
-let numCount = 0;
-let indexControl = 0;
-
 const rowsParePage = 5
-const showTask = () => {
-	ACTIVE_PAGE--
 
+const addTask = () => {
+	if (addTaskInput.value.trim().length !== 0) {
+		initialTaskData.push({task: addTaskInput.value, id: Date.now()});
+		addTaskInput.value = "";
+		renderPagesData(initialTaskData);
+	}
+	// adding active class to lastElement
 	const lastElement = paginationBtnWrapper.lastChild;
-
-
-	// console.log('paginationManage',paginationManage)
-	console.log('ACTIVEPAGE: ', ACTIVE_PAGE)
-
-
-	let start = rowsParePage * ACTIVE_PAGE
-	let end = start + rowsParePage
-	console.log(start, end) // <--------------- კონვერტაციის შემდგომ ხდება აქთივფეიჯის გადაკეთება, სწორედ ამიტომ   არ    მუშაობს
-
-	if (paginationManage === 0 || paginationManage === Number(lastElement.textContent) || paginationManage - 1 === Number(lastElement.textContent)) {
-		// console.log('lastContent: ', lastElement.textContent)
-		ACTIVE_PAGE = Number(lastElement.textContent);
-		console.log('ACTIVEPAGE: ', ACTIVE_PAGE)
-		paginationManage = 0;
-		// console.log('working if')
-	}
-	else if (paginationManage !== Number(lastElement.textContent)) {
-		ACTIVE_PAGE = paginationManage;
-		paginationManage = 0;
-		// console.log('working else if')
-
+	if (lastElement) {
+		lastElement.classList.add("active");
 	}
 
+	// const lastElement = paginationBtnWrapper.lastChild;
+	ACTIVE_PAGE = Number(lastElement.textContent)
+	ACTIVE_PAGE--
+	let start = rowsParePage * ACTIVE_PAGE // სლაისიც პირველი ელემენტი
+	let end = start + rowsParePage // სლაისის მეორე ელემენტი
 
-
+	console.log(start, end)
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML = initialTaskData.slice(start, end)
 			?.map((task, index) => {
@@ -53,55 +39,22 @@ const showTask = () => {
 			.join("");
 	}
 };
-
-const addTask = () => {
-	// const last = paginationBtnWrapper.lastChild;
-
-
-	if (numCount > 4) {
-		numCount = 0;
-		indexControl = indexControl + 5;
-
-	}
-	if (indexControl > initialTaskData.length) {
-		indexControl = indexControl - 5;
-	}
-	if (addTaskInput.value.trim().length !== 0) {
-		initialTaskData.push({task: addTaskInput.value, id: Date.now()});
-		addTaskInput.value = "";
-		renderPagesData(initialTaskData);
-	}
-
-	const lastElement = paginationBtnWrapper.lastChild;
-	if (lastElement) {
-		lastElement.classList.add("active");
-	}
-	ACTIVE_PAGE = Number(lastElement.textContent)
-};
-let paginationManage = 0;
-
 const changePage = (pageNumber) => {
-
-
-	let paginationBtn = document.getElementById(`paginationBtn${pageNumber}`);
-	paginationManage = Number(paginationBtn.innerHTML);
-	const globalPaginationBtn = document.querySelectorAll(".btn-default");
-	if (paginationBtn) {
-		globalPaginationBtn.forEach((button) => {
+	console.log('pageNumber',pageNumber)
+	ACTIVE_PAGE = pageNumber
+	let allPaginationButton = document.querySelectorAll(".paginationButton");
+	if (allPaginationButton) {
+		allPaginationButton.forEach((button) => {
 			button.classList.remove("active");
-
-		});
-		ACTIVE_PAGE = paginationBtn.innerHTML;
-		if (Number(paginationBtn.innerHTML) === pageNumber) {
-			paginationBtn.classList.add("active");
-		}
+		})
 	}
-	paginationBtn.classList.add("active");
+	let activeButton = paginationBtnWrapper.children.item(pageNumber - 1)
+	if (activeButton) {
+		activeButton.classList.add('active')
+	}
 
 	let start = rowsParePage * (ACTIVE_PAGE - 1)
 	let end = start + rowsParePage
-	// console.log(start, end)
-	// console.log(activePage)
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML = initialTaskData.slice(start, end)
 			.map((task) => {
@@ -114,7 +67,7 @@ const changePage = (pageNumber) => {
 			})
 			.join("");
 	}
-	console.log(paginationBtn)
+	// console.log(paginationBtn)
 
 
 };
@@ -126,25 +79,20 @@ addTaskInput.addEventListener("keyup", (e) => {
 	}
 });
 
+
 const renderPagesData = () => {
-
-
 	paginationBtnWrapper.innerHTML = '';
-
 	for (let i = 1; i <= Math.ceil(initialTaskData.length / rowsParePage); i++) {
 		const paginationBtn = document.createElement('button');
 		paginationBtn.innerHTML = i;
-		paginationBtn.setAttribute('class', 'btn btn-default');
+		paginationBtn.setAttribute('class', 'btn btn-default paginationButton');
 		paginationBtn.setAttribute('id', `paginationBtn${i}`);
 		paginationBtn.addEventListener('click', () => {
 			changePage(i);
 		});
 		paginationBtnWrapper.append(paginationBtn);
 	}
-
-	showTask();
 };
-
 
 const editHandler = (identifier) => {
 	const inputForEdit = document.getElementById(`ident${identifier}`);
@@ -176,7 +124,6 @@ const editHandler = (identifier) => {
 // Item Removing
 const removeBtn = (identifier) => {
 
-
 	const removeButton = document.getElementById(`remove${identifier}`);
 
 	initialTaskData = initialTaskData.filter((item) => {
@@ -189,8 +136,10 @@ const removeBtn = (identifier) => {
 
 	});
 
-	renderPagesData(initialTaskData);
+	// renderPagesData();
 	changePage(ACTIVE_PAGE);
+	console.log(ACTIVE_PAGE)
+
 
 };
 
@@ -203,3 +152,4 @@ const onCheckBox = (identifier) => {
 		initialValue.classList.remove('done');
 	}
 };
+
