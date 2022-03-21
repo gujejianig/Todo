@@ -1,7 +1,6 @@
 const addTaskInput = document.getElementById("add-task-input");
 const taskList = document.getElementById("tasks-list");
 const paginationBtnWrapper = document.getElementById("pagination-buttons-wrapper");
-let getIndex;
 let initialTaskData = [];
 let active_page_index = 1;
 const rowsParePage = 5;
@@ -17,16 +16,13 @@ const addTask = () => {
 	if (lastElement) {
 		lastElement.classList.add("active");
 	}
-
 	active_page_index = Number(lastElement.textContent);
-
 	let start = rowsParePage * (active_page_index - 1); // first element of Slice
 	let end = start + rowsParePage; // second element of Slice
 
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML = initialTaskData.slice(start, end)
 			?.map((task, index) => {
-				getIndex = index;
 				return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
                		<input onclick=onCheckBox(${task.id}) id="checkBox${task.id}" type="checkbox" /> 
                 	<input value="${task.task}" id="ident${task.id}" class="hideItem"/>
