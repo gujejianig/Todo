@@ -20,8 +20,8 @@ const addTask = () => {
 
 	// const lastElement = paginationBtnWrapper.lastChild;
 	ACTIVE_PAGE = Number(lastElement.textContent)
-	ACTIVE_PAGE--
-	let start = rowsParePage * ACTIVE_PAGE // სლაისიც პირველი ელემენტი
+
+	let start = rowsParePage * (ACTIVE_PAGE - 1) // სლაისიც პირველი ელემენტი
 	let end = start + rowsParePage // სლაისის მეორე ელემენტი
 
 	console.log(start, end)
