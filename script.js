@@ -22,7 +22,7 @@ const addTask = () => {
 
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML = initialTaskData.slice(start, end)
-			?.map((task, index) => {
+			?.map((task) => {
 				return `<div id="mainDiv${task.id}" class="task" > <p id="changedValue${task.id}" class="todoInput">${task.task}  </p>
                		<input onclick=onCheckBox(${task.id}) id="checkBox${task.id}" type="checkbox" /> 
                 	<input value="${task.task}" id="ident${task.id}" class="hideItem"/>
