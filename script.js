@@ -3,7 +3,7 @@ const taskList = document.getElementById("tasks-list");
 const paginationBtnWrapper = document.getElementById("pagination-buttons-wrapper");
 let getIndex;
 let initialTaskData = [];
-let ACTIVE_PAGE = 1;
+let active_page_index = 1;
 const rowsParePage = 5;
 
 const addTask = () => {
@@ -18,13 +18,11 @@ const addTask = () => {
 		lastElement.classList.add("active");
 	}
 
-	// const lastElement = paginationBtnWrapper.lastChild;
-	ACTIVE_PAGE = Number(lastElement.textContent);
+	active_page_index = Number(lastElement.textContent);
 
-	let start = rowsParePage * (ACTIVE_PAGE - 1); // სლაისიც პირველი ელემენტი
-	let end = start + rowsParePage; // სლაისის მეორე ელემენტი
+	let start = rowsParePage * (active_page_index - 1); // first element of Slice
+	let end = start + rowsParePage; // second element of Slice
 
-	console.log(start, end);
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML = initialTaskData.slice(start, end)
 			?.map((task, index) => {
@@ -42,8 +40,7 @@ const addTask = () => {
 const changePage = (pageNumber) => {
 	const lastElement = paginationBtnWrapper.lastChild;
 
-	console.log('pageNumber', pageNumber);
-	ACTIVE_PAGE = pageNumber;
+	active_page_index = pageNumber;
 	let allPaginationButton = document.querySelectorAll(".paginationButton");
 	if (allPaginationButton) {
 		allPaginationButton.forEach((button) => {
@@ -54,20 +51,15 @@ const changePage = (pageNumber) => {
 	if (activeButton) {
 		activeButton.classList.add('active');
 	}
-	console.log(ACTIVE_PAGE - 1);
 
-	console.log(initialTaskData.length % 5 === 0);
-	// console.log(pageNumber === Number(lastElement.textContent))
 
-	if (lastElement && pageNumber - 1 === Number(lastElement.textContent) && initialTaskData.length % 5 === 0) {
-		ACTIVE_PAGE--;
+	if (lastElement && pageNumber - 1 === Number(lastElement.textContent) && initialTaskData.length % 5 === 0) { // If the active button is the last button and the last item is deleted - (I think its bad practise, need Feedback)
+		active_page_index--;
 		lastElement.classList.add('active');
-
 	}
 
-	let start = rowsParePage * (ACTIVE_PAGE - 1);
-	let end = start + rowsParePage;
-	console.log(start, end);
+	let start = rowsParePage * (active_page_index - 1); // first element of slice
+	let end = start + rowsParePage; // second element of slice
 	if (initialTaskData.length >= 0) {
 		taskList.innerHTML = initialTaskData.slice(start, end)
 			.map((task) => {
@@ -80,7 +72,6 @@ const changePage = (pageNumber) => {
 			})
 			.join("");
 	}
-	// console.log(paginationBtn)
 
 
 };
@@ -130,30 +121,21 @@ const editHandler = (identifier) => {
 			}
 		});
 	}
-
-
 };
 
 // Item Removing
 const removeBtn = (identifier) => {
-
 	const removeButton = document.getElementById(`remove${identifier}`);
-
 	initialTaskData = initialTaskData.filter((item) => {
-
 		if (removeButton.innerHTML === "Remove") {
 			return item.id !== identifier;
 		} else {
 			return item;
 		}
-
 	});
 
 	renderPagesData();
-	changePage(ACTIVE_PAGE);
-	console.log(ACTIVE_PAGE);
-
-
+	changePage(active_page_index);
 };
 
 const onCheckBox = (identifier) => {
